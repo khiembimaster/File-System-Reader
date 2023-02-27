@@ -1,0 +1,9 @@
+{
+    "java.project.sourcePaths": [
+        "src"
+    ],
+    "files.associations": {
+        "iostream": "cpp",
+        "xstring": "cpp"
+    }
+}
