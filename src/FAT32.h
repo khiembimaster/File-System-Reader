@@ -10,12 +10,12 @@ class FAT32 : public FileSystemInterface
 {
 private:
     LPCWSTR drive;
-    unsigned int bytes_per_sector;
-    unsigned int sectors_per_cluster;
-    unsigned int sectors_of_bootsector;
-    unsigned int numbers_of_fats;
-    unsigned int sector_of_RDET;
-    unsigned int sector_per_FAT;
+    WORD bytes_per_sector;
+    BYTE sectors_per_cluster;
+    WORD sectors_of_bootsector;
+    BYTE numbers_of_fats;
+    WORD sector_of_RDET;
+    WORD sector_per_FAT;
     unsigned int first_sector_of_data;
 
     BYTE* Boot_Sector;
@@ -43,6 +43,7 @@ private:
 
 FAT32::FAT32(LPCWSTR drive)
 {
+    this->drive = drive;
 }
 
 FAT32::~FAT32()
