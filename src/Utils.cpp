@@ -1,3 +1,4 @@
+#pragma once
 #include <windows.h>
 
 #include <iostream>
@@ -36,6 +37,13 @@ int ReadSector(LPCWSTR  drive, int readPoint, BYTE sector[512])
     }
 
     return 1;
+}
+
+int64_t ReadBytes(BYTE* sector, int offset, int number)
+{
+    int64_t result = 0;
+    memcpy(&result, sector + offset, number);
+    return result;
 }
 
 int main(int argc, char ** argv)
