@@ -4,7 +4,7 @@
 #include <iostream>
 using namespace std;
 
-int ReadSector(LPCWSTR  drive, int readPoint, BYTE sector[512])
+bool ReadSector(LPCWSTR  drive, int readPoint, BYTE* sector, size_t size)
 {
     int retCode = 0;
     DWORD bytesRead;
@@ -26,7 +26,7 @@ int ReadSector(LPCWSTR  drive, int readPoint, BYTE sector[512])
 
     SetFilePointer(device, readPoint, NULL, FILE_BEGIN);//Set a Point to Read
 
-    if (!ReadFile(device, sector, 512, &bytesRead, NULL))
+    if (!ReadFile(device, sector, size, &bytesRead, NULL))
     {
         cout << "ReadFile: " << GetLastError() << endl;
         return 0;
@@ -46,10 +46,21 @@ int64_t ReadBytes(BYTE* sector, int offset, int number)
     return result;
 }
 
+string Get_String(BYTE* DATA, int offset, int number)
+{
+    char* tmp = new char[number + 1];
+    memcpy(tmp, DATA + offset, number);
+    string s = "";
+    for (int i = 0; i < number; i++)
+        if (tmp[i] != 0x00 && tmp[i] != 0xFF)
+            s += tmp[i];
+    return s;
+}
+
 int main(int argc, char ** argv)
 {
     
     BYTE sector[512];
-    ReadSector(L"\\\\.\\C:",0, sector);
+    ReadSector(L"\\\\.\\C:",0, sector, 512);
     return 0;
 }
