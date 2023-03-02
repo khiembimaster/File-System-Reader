@@ -1,49 +1,57 @@
 #pragma once
 
 #include "FAT32BootSector.h"
-#include "Utils.cpp"
+#include "Disk.h"
+#include <vector>
+#include <climits>
 
 class FAT
 {
-private:
-    int FIRST_CLUSTER = 2;
+public:
+    static const int FIRST_CLUSTER = 2;
 
-    BYTE* Buffer;
-    
-    DWORD* entries;
+private:
+    std::vector<long> entries;
     int sectorCount;
     int sectorSize;
-    FAT32BootSector bootSector;
-    DWORD offset;
-    int lastClusterIndex;
-
+    Disk* device;
+    FAT32BootSector* bs;
+    long offset;
+    int lastClusterIndex; 
     int lastAllocatedCluster;
-
 public:
-    void Init(LPCWSTR, DWORD, size_t);
     FAT(/* args */);
     ~FAT();
+private:
+    FAT(FAT32BootSector*, long);
+    void read();
+public:
+    static FAT* read(FAT32BootSector*, int);
+    long readEntry(BYTE*, int);
 
 public:
-    int64_t ReadFAT(int);
+    // Disk* getDevice();
+    // FAT32BootSector* getBootSector();
+
+    long getEntry(int);
+    int getLastFreeCluster();
+    std::vector<long> getChain(long startCluster);
+    long getNextCluster(long cluster);
+    int getFreeClusterCount();
+    int getLastAllocatedCluster();
+
+protected:
+    void testCluster(long);
+    boolean isFreeCluster(long entry);
+    // boolean isReservedCluster(long entry);
+    boolean isEofCluster(long entry);
 };
 
-void FAT::Init(LPCWSTR drive, DWORD start, size_t size)
-{
-    Buffer = new BYTE [size];
-    ReadSector(drive, start, Buffer, size);
-}
 
-int64_t FAT::ReadFAT(int offset)
-{
-    return ReadBytes(Buffer, offset, 4);
-}
+// boolean FAT::isReservedCluster(long entry) {
+//     ((entry >= minReservedEntry) && (entry <= maxReservedEntry))
+//     return fatType.isReservedCluster(entry);
+// }
 
-FAT::FAT(/* args */)
-{
-}
 
-FAT::~FAT()
-{
-    delete [] Buffer;
-}
+

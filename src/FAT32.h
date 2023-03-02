@@ -13,8 +13,8 @@ class FAT32 : public FileSystemInterface
 {
 private:
     Disk* disk;
-    FAT32BootSector Boot_Sector;
-    // FAT File_Allocation_Table;
+    FAT32BootSector* Boot_Sector;
+    FAT* File_Allocation_Table;
     // RDET Root_Directory;
     
     // Entry RootEntry;
@@ -49,4 +49,6 @@ FAT32::FAT32()
 FAT32::~FAT32()
 {
     delete disk;
+    delete Boot_Sector;
+    delete File_Allocation_Table;
 }

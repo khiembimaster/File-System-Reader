@@ -28,7 +28,17 @@ public:
     long getSectorsPerFat();
     long getSectorCount();
     long getNrReservedSectors();
+    long getNrFats();
     long getRootDirFirstCluster();
     long getFatOffset(int fatNr);
     
+    long getFilesOffset();
+    long getRootDirOffset();
+
+    int getBytesPerCluster();
+    long getDataClusterCount();
+    
+private:
+    long getDataSize();
 };
+

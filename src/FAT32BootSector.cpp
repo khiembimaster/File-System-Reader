@@ -47,6 +47,28 @@ long FAT32BootSector::getNrReservedSectors()
     return getNum(RESERVED_SECTORS_OFFSET, 2);
 }
 
+
+
+long FAT32BootSector::getRootDirOffset()
+{
+    long sectSize = this->getBytesPerSector();
+    long sectsPerFat = this->getSectorsPerFat();
+    int fats = this->getNrFats();
+
+    long offset = getFatOffset(0);
+
+    offset += fats * sectsPerFat * sectSize;
+
+    return offset;
+}
+
+long FAT32BootSector::getFilesOffset()
+{
+    long offset = this->getRootDirOffset();
+
+    return offset;
+}
+
 long FAT32BootSector::getFatOffset(int fatNr) {
     long sectSize = this->getBytesPerSector();
     long sectsPerFat = this->getSectorsPerFat();
@@ -60,3 +82,21 @@ long FAT32BootSector::getFatOffset(int fatNr) {
     return offset;
 }
 
+long FAT32BootSector::getNrFats()
+{
+    return getNum(FAT_COUNT_OFFSET, 1);
+}
+
+int FAT32BootSector::getBytesPerCluster() {
+    return this->getSectorsPerCluster() * this->getBytesPerSector();
+}
+
+long FAT32BootSector::getDataClusterCount()
+{
+    return getDataSize() / getBytesPerCluster();
+}
+
+long FAT32BootSector::getDataSize()
+{
+    return (getSectorCount() * getBytesPerSector()) - this->getFilesOffset();
+}
