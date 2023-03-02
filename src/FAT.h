@@ -1,11 +1,24 @@
 #pragma once
 
+#include "FAT32BootSector.h"
 #include "Utils.cpp"
 
 class FAT
 {
 private:
+    int FIRST_CLUSTER = 2;
+
     BYTE* Buffer;
+    
+    DWORD* entries;
+    int sectorCount;
+    int sectorSize;
+    FAT32BootSector bootSector;
+    DWORD offset;
+    int lastClusterIndex;
+
+    int lastAllocatedCluster;
+
 public:
     void Init(LPCWSTR, DWORD, size_t);
     FAT(/* args */);
