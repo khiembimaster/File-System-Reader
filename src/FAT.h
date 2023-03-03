@@ -30,8 +30,8 @@ public:
     long readEntry(BYTE*, int);
 
 public:
-    // Disk* getDevice();
-    // FAT32BootSector* getBootSector();
+    Disk* getDevice();
+    FAT32BootSector* getBootSector();
 
     long getEntry(int);
     int getLastFreeCluster();
@@ -40,7 +40,9 @@ public:
     int getFreeClusterCount();
     int getLastAllocatedCluster();
 
-protected:
+
+
+public:
     void testCluster(long);
     boolean isFreeCluster(long entry);
     // boolean isReservedCluster(long entry);

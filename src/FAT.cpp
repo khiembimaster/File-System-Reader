@@ -136,3 +136,16 @@ int FAT::getLastAllocatedCluster()
 {
     return this->lastAllocatedCluster;
 }
+
+FAT32BootSector*  FAT::getBootSector() {
+    return this->bs;
+}
+
+/**
+ * Returns the {@code BlockDevice} where this {@code Fat} is stored.
+ *
+ * @return the device holding this FAT
+ */
+Disk* FAT::getDevice() {
+    return device;
+}
