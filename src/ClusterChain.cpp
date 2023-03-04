@@ -1,5 +1,5 @@
 #include "ClusterChain.h"
-#include <cmath>
+#include <algorithm>
 
 
 ClusterChain::ClusterChain(FAT*)
@@ -77,8 +77,8 @@ void ClusterChain::readData(long offset, BYTE* dest, int len)
     
     if (offset % clusterSize != 0) {
         int clusOfs = (int) (offset % clusterSize);
-        int size = min(len,
-                (int) (clusterSize - (offset % clusterSize)));
+        int temp = (int) (clusterSize - (offset % clusterSize)) ;
+        const int size = (len < temp) ? len : temp;
         // dest.limit(dest.position() + size);
 
         dev->read(getDevOffset(chain[chainIdx], clusOfs), dest, size);
@@ -88,7 +88,7 @@ void ClusterChain::readData(long offset, BYTE* dest, int len)
     }
 
     while (len > 0) {
-        int size = min(clusterSize, len);
+        const int size = (len < clusterSize) ? len : clusterSize;
         // dest.limit(dest.position() + size);
 
         dev->read(getDevOffset(chain[chainIdx], 0), dest, size);

@@ -35,7 +35,7 @@ FAT::FAT(FAT32BootSector* bs, long offset) {
     err << "file system has " << this->lastClusterIndex <<
         "clusters but only " << entries.size() << " FAT entries";
 
-    if (lastClusterIndex > entries.size()) throw (err);
+    if (lastClusterIndex > entries.size()) throw (err.str());
 }
 
 void FAT::read() {
@@ -66,12 +66,12 @@ int FAT::getLastFreeCluster()
 }
 std::vector<long> FAT::getChain(long startCluster)
 {
-    try{
-        testCluster(startCluster);
-    }catch(std::exception e){
-        std::cout << e.what();
-        return ;
-    }
+    // try{
+    //     testCluster(startCluster);
+    // }catch(std::exception e){
+    //     std::cout << e.what();
+    //     return 0;
+    // }
 
     int count = 1;
     long cluster = startCluster;
@@ -89,7 +89,7 @@ void FAT::testCluster(long cluster)
     std::stringstream err;
     err << "invalid cluster value " + cluster;
     if ((cluster < FIRST_CLUSTER) || (cluster >= entries.size())) {
-        throw (err);
+        throw (err.str());
     }
 }
 
@@ -104,7 +104,7 @@ long FAT::getNextCluster(long cluster)
         testCluster(cluster);
     }catch(std::exception e){
         std::cout << e.what();
-        return ;
+        return -1;
     }
 
     long entry = entries[(int) cluster];

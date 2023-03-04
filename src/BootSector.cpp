@@ -19,7 +19,7 @@ BootSector* BootSector::read(Disk* device)
     }
     else if(0 < bb[FAT_COUNT_OFFSET] <= 2)
     {
-        result = new FAT32BootSector(device);
+        result = (BootSector*) new FAT32BootSector(device);
     }
     else throw("To much fats ?");
 

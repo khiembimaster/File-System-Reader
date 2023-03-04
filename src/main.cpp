@@ -1,12 +1,16 @@
-#include <FileSystem.h>
-#include <FAT32.h>
-#include <NTFS.h>
+//#include <FileSystem.h>
+// #include "FAT32.h"
+#include "Disk.h"
+//#include <NTFS.h>
+
 
 int main()
 {
+    Disk* usb = Disk::create(L"\\\\.\\E:");
     
-    FileSystemInterface* fs = new FAT32(L"\\\\.\\C:");
-    fs->Show_Partition_Info();
-    fs->Show_Current_Directory();
-    delete fs;
-}   
+    // FAT32* p = FAT32::read(usb);
+    
+    delete usb;
+    
+    system("pause");
+}

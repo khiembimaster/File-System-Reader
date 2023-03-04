@@ -1,8 +1,8 @@
-#pragma once
+// #pragma once
 
-#include "BootSector.h"
+// #include "BootSector.h"
 
-class NTFSBootSector: public BootSector
-{
+// class NTFSBootSector: public BootSector
+// {
 
-};
+// };

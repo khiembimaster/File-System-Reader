@@ -1,3 +1,4 @@
+#pragma once
 #include <Windows.h>
 #include <string>
 #include <sstream>
@@ -155,7 +156,7 @@ public:
             sum = dest[i] + (((sum & 1) << 7) + ((sum & 0xfe) >> 1));
         }
         
-        return (byte) (sum & 0xff);
+        return (BYTE) (sum & 0xff);
         
     }
     std::string asSimpleString()

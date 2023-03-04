@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 #include "FsDirectory.h"
 #include "FsFile.h"

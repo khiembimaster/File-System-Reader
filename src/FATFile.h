@@ -1,3 +1,4 @@
+#pragma once
 #include "FsFile.h"
 #include "FatDirectoryEntry.h"
 #include "ClusterChain.h"

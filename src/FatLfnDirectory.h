@@ -129,18 +129,18 @@ private:
                 break;
             }
             
-            FatLfnDirectoryEntry* current =
-                    FatLfnDirectoryEntry::extract(this, offset, ++i - offset);
+            // FatLfnDirectoryEntry* current =
+            //         FatLfnDirectoryEntry::extract(this, offset, ++i - offset);
             
-            if (!current->realEntry->isDeleted() && current->isValid()) {
-                checkUniqueName(current.getName());
-                this.usedNames.add(current.realEntry.getShortName().asSimpleString().toLowerCase(Locale.ROOT));
+            // if (!current->realEntry->isDeleted() && current->isValid()) {
+            //     checkUniqueName(current->getName());
+            //     this->usedNames->add(current->realEntry->getShortName()->asSimpleString()toLowerCase(Locale->ROOT));
                 
-                shortNameIndex.put(current.realEntry.getShortName(), current);
-                longNameIndex.put(current
-                        .getName()
-                        .toLowerCase(Locale.ROOT), current);
-            }
+            //     shortNameIndex->put(current->realEntry->getShortName(), current);
+            //     longNameIndex->put(current
+            //             ->getName()
+            //             ->toLowerCase(Locale->ROOT), current);
+            // }
         }
     }
 

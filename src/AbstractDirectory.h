@@ -1,4 +1,5 @@
 #pragma once
+
 #include <vector>
 #include <string>
 #include <iostream>
@@ -10,7 +11,7 @@ public:
     static const int MAX_LABEL_LENGTH = 11;
 private:
     std::vector<FatDirectoryEntry*> entries;
-    bool isRoot;
+    bool IsRoot;
     int capacity;
     std::string volumeLabel;
 
@@ -18,7 +19,7 @@ protected:
     AbstractDirectory(int capacity, bool isRoot) 
     {
         this->capacity = capacity;
-        this->isRoot = isRoot;
+        this->IsRoot = isRoot;
     }
 
     virtual void read(BYTE* data, int size) = 0;
@@ -38,7 +39,7 @@ public:
     }
 
     boolean isRoot() {
-        return this->isRoot;
+        return this->IsRoot;
     }
 
     int getSize() {
@@ -47,7 +48,7 @@ public:
 
     void checkRoot() 
     {
-        if (!isRoot) {
+        if (!IsRoot) {
             throw ("only supported on root directories");
         }
     }
@@ -76,7 +77,7 @@ public:
             if (e == nullptr) break;
             
             if (e->isVolumeLabel()) {
-                if (!this->isRoot) throw("volume label in non-root directory");
+                if (!this->IsRoot) throw("volume label in non-root directory");
                 
                 this->volumeLabel = e->getVolumeLabel();
             } else {

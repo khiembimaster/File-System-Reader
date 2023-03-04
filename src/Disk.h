@@ -1,4 +1,5 @@
 #pragma once
+
 #include <Windows.h>
 #include <fstream>
 #include <iostream>
@@ -9,7 +10,7 @@ public:
     static const int BYTES_PER_SECTOR = 512;
 
 private:
-    LPCWSTR drive = L"////.//E:";
+    LPCWSTR drive = L"\\\\.\\E:";
     HANDLE device;
     // std::istream file_stream;
 
@@ -18,5 +19,5 @@ private:
 public:
     static Disk* create(LPCWSTR);
     DWORD getSize();
-    void read(long devOffset, BYTE* dest, size_t);
+    void read(long, BYTE*, size_t);
 };

@@ -60,16 +60,3 @@ DWORD Disk::getSize()
 Disk::Disk() {}
 
 Disk::Disk(LPCWSTR drive, HANDLE device): drive{drive}, device{device} {}
-
-// int main()
-// {
-//     Disk* disk= Disk::create(L"\\\\.\\E:");
-//     std::cout << disk->getSize();
-    
-//     BYTE* buffer = new BYTE [512];
-//     disk->read(0, buffer, 512);
-//     std::wcout << buffer;
-//     delete disk;
-//     delete [] buffer;
-//     system("pause");
-// }

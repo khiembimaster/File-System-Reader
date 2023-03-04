@@ -18,7 +18,7 @@ protected:
         this->buffer = new BYTE [size];
     }
 
-    virtual ~Sector()
+    ~Sector()
     {
         delete[] buffer;
     }
