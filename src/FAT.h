@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FAT32BootSector.h"
+#include "BootSector.h"
 #include "Disk.h"
 #include <vector>
 #include <climits>

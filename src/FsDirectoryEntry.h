@@ -9,5 +9,5 @@ public:
     virtual std::string getName() = 0;
     virtual FsDirectory* getParent() = 0;
     virtual FsFile* getFile() = 0;
-    virtual ~FsDirectoryEntry();
+    virtual ~FsDirectoryEntry() = 0;
 };  

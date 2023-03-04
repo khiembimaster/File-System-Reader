@@ -28,7 +28,7 @@ private:
     // ShortNameGenerator sng;
 public:
     AbstractDirectory* dir;
-
+    ~FatLfnDirectory(){}
 public:
     FatLfnDirectory(AbstractDirectory* dir, FAT* fat)
     {
