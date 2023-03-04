@@ -63,7 +63,7 @@ Disk::Disk(LPCWSTR drive, HANDLE device): drive{drive}, device{device} {}
 
 // int main()
 // {
-//     Disk* disk= Disk::create(L"\\\\.\\C:");
+//     Disk* disk= Disk::create(L"\\\\.\\E:");
 //     std::cout << disk->getSize();
     
 //     BYTE* buffer = new BYTE [512];
