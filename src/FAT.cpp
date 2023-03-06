@@ -5,7 +5,7 @@
 FAT::FAT(/* args */){}
 FAT::~FAT(){}
 
-FAT* FAT::read(FAT32BootSector* bs, int fatNr)
+std::shared_ptr<FAT> FAT::read(std::shared_ptr<FAT32BootSector> bs, int fatNr)
 {
     if(fatNr > bs->getNrFats())
     {
@@ -13,12 +13,12 @@ FAT* FAT::read(FAT32BootSector* bs, int fatNr)
     }
 
     long fatOffset = bs->getFatOffset(fatNr);
-    FAT* result = new FAT(bs, fatOffset);
+    std::shared_ptr<FAT> result = std::make_shared<FAT>(bs, fatOffset);
     result->read();
     return result;
 }
 
-FAT::FAT(FAT32BootSector* bs, long offset) {
+FAT::FAT(std::shared_ptr<FAT32BootSector> bs, long offset) {
     this->bs = bs;
 
     this->sectorCount = (int) bs->getSectorsPerFat();
@@ -29,7 +29,7 @@ FAT::FAT(FAT32BootSector* bs, long offset) {
     
     this->lastClusterIndex = (int) bs->getDataClusterCount() + FIRST_CLUSTER;
 
-    entries.resize((int) ((sectorCount * sectorSize) / 4));
+    entries.resize((int) ((sectorCount * sectorSize) / 4), 0);
             
     std::stringstream err;
     err << "file system has " << this->lastClusterIndex <<
@@ -67,21 +67,28 @@ int FAT::getLastFreeCluster()
 std::vector<long> FAT::getChain(long startCluster)
 {
     // try{
-    //     testCluster(startCluster);
+    //     
     // }catch(std::exception e){
     //     std::cout << e.what();
     //     return 0;
     // }
-
+    // testCluster(startCluster);
     int count = 1;
     long cluster = startCluster;
-    std::vector<long> chain;
     while (!isEofCluster(entries[(int) cluster])) {
         count++;
         cluster = entries[(int) cluster];
-        chain.push_back(cluster);
     }
 
+    std::vector<long> chain;
+    chain.resize(count, 0);
+    chain[0] = startCluster;
+    cluster = startCluster;
+    int i = 0;
+    while (!isEofCluster(entries[(int) cluster])) {
+        cluster = entries[(int) cluster];
+        chain[++i] = cluster;
+    }
     return chain;
 }
 void FAT::testCluster(long cluster)
@@ -137,7 +144,7 @@ int FAT::getLastAllocatedCluster()
     return this->lastAllocatedCluster;
 }
 
-FAT32BootSector*  FAT::getBootSector() {
+std::shared_ptr<FAT32BootSector>  FAT::getBootSector() {
     return this->bs;
 }
 
@@ -146,6 +153,6 @@ FAT32BootSector*  FAT::getBootSector() {
  *
  * @return the device holding this FAT
  */
-Disk* FAT::getDevice() {
+std::shared_ptr<Disk> FAT::getDevice() {
     return device;
 }

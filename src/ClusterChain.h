@@ -1,23 +1,24 @@
 #pragma once
 #include "FAT.h"
 #include "Disk.h"
+#include <memory>
 class ClusterChain
 {
 private:
-    FAT* fat;
-    Disk* device;
+    std::shared_ptr<FAT> fat;
+    std::shared_ptr<Disk> device;
     int clusterSize;
     long dataOffset;
 
     long startCluster;
 public:
-    ClusterChain(FAT*);
-    ClusterChain(FAT*, long);
+    ClusterChain(std::shared_ptr<FAT>);
+    ClusterChain(std::shared_ptr<FAT>, long);
 
 public:
     int getClusterSize();
-    FAT* getFat();
-    Disk* getDevice();
+    std::shared_ptr<FAT> getFat();
+    std::shared_ptr<Disk> getDevice();
     long getStartCluster();
     long getLengthOnDisk();
     int getChainLength();

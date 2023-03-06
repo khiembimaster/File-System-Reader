@@ -1,15 +1,15 @@
 #include "FatLfnDirectoryEntry.h"
 
-FatLfnDirectoryEntry::FatLfnDirectoryEntry(FatLfnDirectory* parent, FatDirectoryEntry* realEntry, std::string fileName)
+FatLfnDirectoryEntry::FatLfnDirectoryEntry(std::shared_ptr<FatLfnDirectory> parent, std::shared_ptr<FatDirectoryEntry> realEntry, std::string fileName)
 {
     this->parent = parent;
     this->realEntry = realEntry;
     this->fileName = fileName;
 }
 
-FatLfnDirectoryEntry* FatLfnDirectoryEntry::extract(FatLfnDirectory* dir, int offset, int len)
+std::shared_ptr<FatLfnDirectoryEntry> FatLfnDirectoryEntry::extract(std::shared_ptr<FatLfnDirectory> dir, int offset, int len)
 {
-    FatDirectoryEntry* realEntry = dir->dir->getEntry(offset + len - 1);
+    std::shared_ptr<FatDirectoryEntry> realEntry = dir->dir->getEntry(offset + len - 1);
     std::string fileName;
 
     if(len == 1) {
@@ -19,14 +19,14 @@ FatLfnDirectoryEntry* FatLfnDirectoryEntry::extract(FatLfnDirectory* dir, int of
     {
         std::stringstream name;
         for(int i = len - 2; i >= 0; i--) {
-            FatDirectoryEntry* entry = dir->dir->getEntry(i + offset);
+            std::shared_ptr<FatDirectoryEntry> entry = dir->dir->getEntry(i + offset);
             name << entry->getLfnPart();
         }
 
         fileName = name.str();
     }
 
-    return new FatLfnDirectoryEntry(dir, realEntry, fileName);
+    return std::make_shared<FatLfnDirectoryEntry>(dir, realEntry, fileName);
 }
 
 bool FatLfnDirectoryEntry::isHiddenFlag()
@@ -61,21 +61,20 @@ bool FatLfnDirectoryEntry::isDirectory()
 
 std::string FatLfnDirectoryEntry::getName()
 {
-    
     return fileName;
 }
 
-FsDirectory* FatLfnDirectoryEntry::getParent()
+std::weak_ptr<FsDirectory> FatLfnDirectoryEntry::getParent()
 {
     return parent;
 }
 
-FATFile* FatLfnDirectoryEntry::getFile()
+std::weak_ptr<FsFile> FatLfnDirectoryEntry::getFile()
 {
     return parent->getFile(realEntry);
 }
 
-FatLfnDirectory* FatLfnDirectoryEntry::getDirectory()
+std::shared_ptr<FatLfnDirectory> FatLfnDirectoryEntry::getDirectory()
 {
     return parent->getDirectory(realEntry);
 }

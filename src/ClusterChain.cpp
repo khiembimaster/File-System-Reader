@@ -1,12 +1,12 @@
 #include "ClusterChain.h"
 #include <algorithm>
+#include <sstream>
 
-
-ClusterChain::ClusterChain(FAT*)
+ClusterChain::ClusterChain(std::shared_ptr<FAT>)
 {
     ClusterChain(fat, 0);
 }
-ClusterChain::ClusterChain(FAT* fat, long startCluster)
+ClusterChain::ClusterChain(std::shared_ptr<FAT> fat, long startCluster)
 {
     this->fat = fat;
 
@@ -30,11 +30,11 @@ int ClusterChain::getClusterSize() {
     return clusterSize;
 }
 
-FAT* ClusterChain::getFat() {
+std::shared_ptr<FAT> ClusterChain::getFat() {
     return fat;
 }
 
-Disk* ClusterChain::getDevice() {
+std::shared_ptr<Disk> ClusterChain::getDevice() {
     return device;
 }
 
@@ -49,8 +49,8 @@ long ClusterChain::getDevOffset(long cluster, int clusterOffset) {
 
 long ClusterChain::getLengthOnDisk() {
     if (getStartCluster() == 0) return 0;
-    
-    return getChainLength() * clusterSize;
+    long result = getChainLength() * clusterSize; 
+    return result;
 }
 
 int ClusterChain::getChainLength() {
@@ -71,7 +71,7 @@ void ClusterChain::readData(long offset, BYTE* dest, int len)
     }
     
     std::vector<long> chain = getFat()->getChain(startCluster);
-    Disk* dev = getDevice();
+    std::shared_ptr<Disk> dev = getDevice();
 
     int chainIdx = (int) (offset / clusterSize);
     

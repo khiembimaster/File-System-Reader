@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <string>
 #include <sstream>
+#include <memory>
 #include "ShortName.h"
 // class ShortName;
 class FatDirectoryEntry
@@ -26,9 +27,10 @@ public:
 private:
     BYTE* data;
 
-    FatDirectoryEntry(BYTE* data);
+    
 public:
-    static FatDirectoryEntry* read(BYTE* buffer);
+    FatDirectoryEntry(BYTE* data);
+    static std::shared_ptr<FatDirectoryEntry> read(BYTE* buffer, long position, long sizeof_buffer);
     bool isVolumeLabel();
     bool isSystemFlag();
     bool isArchiveFlag();
@@ -44,7 +46,7 @@ public:
     std::string getLfnPart();
     bool isDeleted();
 
-    ShortName* getShortName();
+    std::shared_ptr<ShortName> getShortName();
 
     ~FatDirectoryEntry();
 private:

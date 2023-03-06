@@ -3,7 +3,7 @@
 #include <Windows.h>
 #include <fstream>
 #include <iostream>
-
+#include <memory>
 class Disk
 {
 public:
@@ -14,10 +14,11 @@ private:
     HANDLE device;
     // std::istream file_stream;
 
-    Disk(LPCWSTR, HANDLE);
+    
     Disk();
 public:
-    static Disk* create(LPCWSTR);
+    Disk(LPCWSTR, HANDLE);
+    static std::shared_ptr<Disk> create(LPCWSTR);
     DWORD getSize();
-    void read(long, BYTE*, size_t);
+    void read(long, BYTE*, DWORD);
 };

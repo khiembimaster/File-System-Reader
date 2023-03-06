@@ -1,9 +1,10 @@
 #pragma once
 #include <string>
+#include <memory>
+#include "FsDirectoryEntry.h"
+class FsDirectoryEntry;
 class FsDirectory {
 public:
-    virtual std::string getName() = 0;
-    virtual FsDirectory* getParent() = 0;
-    virtual FsDirectory* getDirectory() = 0; 
-    virtual ~FsDirectory() = 0;
+    virtual std::shared_ptr<FsDirectoryEntry> getEntry(std::string name) = 0;
+    virtual ~FsDirectory(){}
 };

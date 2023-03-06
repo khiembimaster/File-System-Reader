@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <vector>
 #include <string>
 #include <iostream>
@@ -10,7 +11,7 @@ class AbstractDirectory
 public:
     static const int MAX_LABEL_LENGTH = 11;
 private:
-    std::vector<FatDirectoryEntry*> entries;
+    std::vector<std::shared_ptr<FatDirectoryEntry>> entries;
     bool IsRoot;
     int capacity;
     std::string volumeLabel;
@@ -26,7 +27,7 @@ protected:
     virtual long getStorageCluster() = 0;
 
 public:
-    FatDirectoryEntry* getEntry(int idx) {
+    std::shared_ptr<FatDirectoryEntry> getEntry(int idx) {
         return this->entries[idx];
     }
 
@@ -70,10 +71,10 @@ public:
                 
         read(data, size);
         // data.flip();
-        
+        long position = 0;
         for (int i=0; i < getCapacity(); i++) {
-            FatDirectoryEntry* e = FatDirectoryEntry::read(data);
-            
+            std::shared_ptr<FatDirectoryEntry> e = FatDirectoryEntry::read(data, position, size);
+            position += FatDirectoryEntry::SIZE;
             if (e == nullptr) break;
             
             if (e->isVolumeLabel()) {

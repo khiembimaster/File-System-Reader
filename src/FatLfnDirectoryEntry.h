@@ -5,19 +5,24 @@
 #include <string>
 
 class FatLfnDirectory;
+class FatDirectoryEntry;
 
 class FatLfnDirectoryEntry : public FsDirectoryEntry
 {
-    FatDirectoryEntry* realEntry;
+    
 
 private:
-    FatLfnDirectory* parent;
+    std::shared_ptr<FatLfnDirectory> parent;
     std::string fileName;
 
 public:
+    std::shared_ptr<FatDirectoryEntry> realEntry;
+    ~FatLfnDirectoryEntry(){
+        // delete parent;
+    }
     // FatLfnDirectoryEntry(std::string name, ShortName sn, FatLfnDirectory* parent, bool directory);
-    FatLfnDirectoryEntry(FatLfnDirectory* parent, FatDirectoryEntry* realEntry, std::string fileName);
-    static FatLfnDirectoryEntry* extract(FatLfnDirectory* dir, int offset, int len);
+    FatLfnDirectoryEntry(std::shared_ptr<FatLfnDirectory> parent, std::shared_ptr<FatDirectoryEntry> realEntry, std::string fileName);
+    static std::shared_ptr<FatLfnDirectoryEntry> extract(std::shared_ptr<FatLfnDirectory> dir, int offset, int len);
 public:
     bool isHiddenFlag();
     bool isSystemFlag();
@@ -27,7 +32,7 @@ public:
     bool isDirectory();
 public:
     std::string getName();
-    FsDirectory* getParent();
-    FATFile* getFile();
-    FatLfnDirectory* getDirectory();
+    std::weak_ptr<FsDirectory> getParent();
+    std::weak_ptr<FsFile> getFile();
+    std::shared_ptr<FatLfnDirectory> getDirectory();
 };

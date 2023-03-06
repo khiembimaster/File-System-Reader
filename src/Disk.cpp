@@ -1,7 +1,7 @@
 #include "Disk.h"
 
 
-void Disk::read(long offset, BYTE* dest, size_t size)
+void Disk::read(long offset, BYTE* dest, DWORD size)
 {
     
     if(this == nullptr)
@@ -21,7 +21,7 @@ void Disk::read(long offset, BYTE* dest, size_t size)
     }
 }
 
-Disk* Disk::create(LPCWSTR drive)
+std::shared_ptr<Disk> Disk::create(LPCWSTR drive)
 {
     HANDLE device = NULL;
 
@@ -40,7 +40,7 @@ Disk* Disk::create(LPCWSTR drive)
     }
     else {
         std::cout << "CreateFile Succeeded " << std::endl;
-        return new Disk(drive, device);
+        return std::make_shared<Disk>(drive, device);
     }
 }
 

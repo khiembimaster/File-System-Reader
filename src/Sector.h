@@ -1,16 +1,16 @@
 #pragma once
-
+#include <memory>
 #include "Disk.h"
 class Sector {
 private:
-    Disk* device;
+    std::shared_ptr<Disk> device;
     long offset;
     int size = 0;
 protected:
     BYTE* buffer;
     Sector() {}
 
-    Sector(Disk* device, long offset, int size)
+    Sector(std::shared_ptr<Disk> device, long offset, int size)
     {
         this->device = device;
         this->offset = offset;
@@ -41,7 +41,7 @@ protected:
     }
 
 public:
-    Disk* getDevice()
+    std::shared_ptr<Disk> getDevice()
     {
         return this->device;
     }

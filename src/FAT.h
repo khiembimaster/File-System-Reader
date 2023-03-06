@@ -1,10 +1,11 @@
 #pragma once
 
 #include "BootSector.h"
+#include "FAT32BootSector.h"
 #include "Disk.h"
 #include <vector>
 #include <climits>
-
+#include <memory>
 class FAT
 {
 public:
@@ -14,8 +15,8 @@ private:
     std::vector<long> entries;
     int sectorCount;
     int sectorSize;
-    Disk* device;
-    FAT32BootSector* bs;
+    std::shared_ptr<Disk> device;
+    std::shared_ptr<FAT32BootSector> bs;
     long offset;
     int lastClusterIndex; 
     int lastAllocatedCluster;
@@ -23,15 +24,16 @@ public:
     FAT(/* args */);
     ~FAT();
 private:
-    FAT(FAT32BootSector*, long);
+    
     void read();
 public:
-    static FAT* read(FAT32BootSector*, int);
+    FAT(std::shared_ptr<FAT32BootSector>, long);
+    static std::shared_ptr<FAT> read(std::shared_ptr<FAT32BootSector>, int);
     long readEntry(BYTE*, int);
 
 public:
-    Disk* getDevice();
-    FAT32BootSector* getBootSector();
+    std::shared_ptr<Disk> getDevice();
+    std::shared_ptr<FAT32BootSector> getBootSector();
 
     long getEntry(int);
     int getLastFreeCluster();

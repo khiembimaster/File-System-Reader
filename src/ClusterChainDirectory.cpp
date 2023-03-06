@@ -1,14 +1,14 @@
 #include "ClusterChainDirectory.h"
 
-ClusterChainDirectory::ClusterChainDirectory(ClusterChain* chain, bool isRoot): 
+ClusterChainDirectory::ClusterChainDirectory(std::shared_ptr<ClusterChain> chain, bool isRoot): 
     AbstractDirectory((int) chain->getLengthOnDisk() / FatDirectoryEntry::SIZE, isRoot)
 {
     this->chain = chain;
 }
 
-ClusterChainDirectory* ClusterChainDirectory::readRoot(ClusterChain* chain)
+std::shared_ptr<ClusterChainDirectory> ClusterChainDirectory::readRoot(std::shared_ptr<ClusterChain> chain)
 {
-    ClusterChainDirectory* result = new ClusterChainDirectory(chain, true);
+    std::shared_ptr<ClusterChainDirectory> result = std::make_shared<ClusterChainDirectory>(chain, true);
     result->readb();
     return result;
 }

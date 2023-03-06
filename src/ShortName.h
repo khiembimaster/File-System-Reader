@@ -5,6 +5,7 @@
 #include <array>
 #include <exception>
 #include <codecvt>
+#include <memory>
 #include <algorithm>
 class ShortName
 {
@@ -15,7 +16,7 @@ private:
     };
 
     static const BYTE ASCII_SPACE =0x20;
-private:
+public:
     ShortName(std::string nameExt) {
         if (nameExt.length() > 12) throw ("name too long");
         
@@ -47,7 +48,7 @@ public:
     ~ShortName()
     {
         delete [] nameBytes;
-    } 
+    }
 private:
     BYTE* nameBytes;
     static BYTE* toCharArray(std::string name, std::string ext)
@@ -72,9 +73,7 @@ private:
     static void checkString(std::string str, std::string strType,
             int minLength, int maxLength) {
         std::stringstream err;
-        err << strType << " is null";
-        if (str.empty())
-            throw err.str();
+
         err.clear();
         err << strType <<
                     " must have at least " << minLength << 
@@ -90,9 +89,9 @@ private:
             throw err.str();
     }
 public:
-    static ShortName* parse(BYTE* data){
+    static std::shared_ptr<ShortName> parse(BYTE* data){
         char nameArr[8];
-        
+        nameArr[7] = '\0';
         for (int i = 0; i < 8; i++) {
             memcpy(nameArr + i, data + i, 1);
         }
@@ -103,18 +102,21 @@ public:
             nameArr[0] = (char) 0xe5;
         }
         
-        char extArr[3];
-        
+        char extArr[4];
+        extArr[3] = '\0';
         for (int i = 0; i < 3; i++) {
             memcpy(extArr + i, data + 0x08 + i, 1);
         }
-
-        return new ShortName(std::string(nameArr),std::string(extArr));
+        std::string str_name = std::string(nameArr);
+        std::string str_ext = std::string(extArr);
+        str_name.erase(str_name.find_last_not_of(" \n\r\t")+1);;
+        str_ext.erase(str_ext.find_last_not_of(" \n\r\t")+1);;
+        return std::make_shared<ShortName>(str_name,str_ext);
     }
 
-    static ShortName* get(std::string name)
+    static std::shared_ptr<ShortName> get(std::string name)
     {
-        return new ShortName(name);
+        return std::make_shared<ShortName>(name);
     }
 
     static void checkValidChars(BYTE* chars, int length) {
@@ -162,11 +164,13 @@ public:
     std::string asSimpleString()
     {
         char bname[8]{0};
-        char bext[3]{0};
+        char bext[4]{0};
         memcpy(bname, this->nameBytes, 8);
         memcpy(bext, this->nameBytes + 8, 3);
         std::string name(bname);
         std::string ext(bext);
+        name.erase(name.find_last_not_of(" \n\r\t")+1);
+        ext.erase(ext.find_last_not_of(" \n\r\t")+1);
         
         return ext.empty() ? name : (name + "." + ext);
     }

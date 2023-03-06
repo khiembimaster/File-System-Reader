@@ -3,11 +3,13 @@
 
 FatDirectoryEntry::FatDirectoryEntry(BYTE* data): data{data} {}
 
-FatDirectoryEntry* FatDirectoryEntry::read(BYTE* buffer)
+std::shared_ptr<FatDirectoryEntry> FatDirectoryEntry::read(BYTE* buffer, long position, long sizeof_buffer)
 {
+    if(position >= sizeof_buffer) return nullptr;
+    if (buffer[position] == 0) return nullptr;
     BYTE* data = new BYTE [SIZE];
-    memcpy (data, buffer, SIZE);
-    return new FatDirectoryEntry(data);
+    memcpy (data, buffer + position, SIZE);
+    return std::make_shared<FatDirectoryEntry>(data);
 }
 
 bool FatDirectoryEntry::isVolumeLabel()
@@ -79,7 +81,7 @@ bool FatDirectoryEntry::isDeleted() {
     return  (result == ENTRY_DELETED);
 }
 
-ShortName* FatDirectoryEntry::getShortName() {
+std::shared_ptr<ShortName> FatDirectoryEntry::getShortName() {
     if (this->data[0] == 0) {
         return nullptr;
     } else {
@@ -126,13 +128,13 @@ std::string FatDirectoryEntry::getLfnPart()
         unicodechar[i] = (char) temp;
     }   
 
-    // int end = 0;
+    int end = 0;
 
-    // while ((end < 13) && (unicodechar[end] != '\0')) {
-    //     end++;
-    // }
+    while ((end < 13) && (unicodechar[end] != '\0')) {
+        end++;
+    }
         
-    return std::string(unicodechar);
+    return std::string(unicodechar).substr(0, end);
 }
 
 FatDirectoryEntry::~FatDirectoryEntry()
