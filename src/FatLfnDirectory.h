@@ -39,7 +39,7 @@ public:
     std::shared_ptr<FatLfnDirectory> getDirectory(std::shared_ptr<FatDirectoryEntry> entry);
     std::shared_ptr<FsDirectoryEntry> getEntry(std::string name);
     bool isFreeName(std::string name);
-
+    std::string showDirectory();
 private:
     void checkUniqueName(std::string name) ;
     void parseLfn();

@@ -43,6 +43,7 @@ std::shared_ptr<FatLfnDirectory> FatLfnDirectory::getDirectory(std::shared_ptr<F
     return result;
 }
 
+
 bool FatLfnDirectory::isFreeName(std::string name) {
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
     bool result = this->usedNames.find(name) == this->usedNames.end();
@@ -130,4 +131,13 @@ std::shared_ptr<ClusterChainDirectory> FatLfnDirectory::read(std::shared_ptr<Fat
 
     result->readb();
     return result;
+}
+
+std::string FatLfnDirectory::showDirectory()
+{
+    std::stringstream sstr;
+    for(auto index : longNameIndex){
+        sstr << "\t" << index.first << std::endl;
+    }
+    return sstr.str();
 }

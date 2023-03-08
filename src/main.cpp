@@ -12,6 +12,13 @@ int main()
     try{
         file_system = FAT32::read(usb);
         // std::cout << file_system->getRoot()->getEntry("kh.txt")->getName();
+        std::cout <<file_system->getVolumeLabel() << std::endl;
+        std::cout << file_system->getRoot()->showDirectory();
+        auto entry = std::dynamic_pointer_cast<FatLfnDirectoryEntry>(file_system->getRoot()->getEntry("new folder"));
+        std::cout << entry->getDirectory()->showDirectory();
+        // file_system->getRoot()->getDirectory(entry)->showDirectory();
+
+        system("pause");
     }catch (std::exception e) {
         std::cout << e.what();
     }
