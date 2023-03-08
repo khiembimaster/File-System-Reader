@@ -11,7 +11,7 @@ int main()
     std::shared_ptr<FAT32> file_system;
     try{
         file_system = FAT32::read(usb);
-        std::cout << file_system->getRoot()->getEntry("kh.txt")->getName();
+        // std::cout << file_system->getRoot()->getEntry("kh.txt")->getName();
     }catch (std::exception e) {
         std::cout << e.what();
     }

@@ -25,6 +25,7 @@ private:
     std::shared_ptr<FAT> fat;
     std::map<std::shared_ptr<ShortName>, std::shared_ptr<FatLfnDirectoryEntry>> shortNameIndex;
     std::map<std::string, std::shared_ptr<FatLfnDirectoryEntry>> longNameIndex;
+    std::vector<std::shared_ptr<FatLfnDirectoryEntry>> deletedIndex;
     std::map<std::shared_ptr<FatDirectoryEntry>, std::shared_ptr<FATFile>> entryToFile;
     std::map<std::shared_ptr<FatDirectoryEntry>, std::shared_ptr<FatLfnDirectory>> entryToDirectory;
     // ShortNameGenerator sng;

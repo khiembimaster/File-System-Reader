@@ -114,6 +114,8 @@ void FatLfnDirectory::parseLfn() {
             temp = current->getName();
             std::transform(temp.begin(), temp.end(), temp.begin(), tolower);
             longNameIndex[temp] = current;
+        }else {
+            deletedIndex.push_back(current);
         }
     }
 }
