@@ -8,10 +8,11 @@ private:
     std::shared_ptr<FAT> fat;
     std::shared_ptr<Disk> device;
     int clusterSize;
-    long dataOffset;
+    
 
     long startCluster;
 public:
+    long dataOffset;
     ClusterChain(std::shared_ptr<FAT>);
     ClusterChain(std::shared_ptr<FAT>, long);
 

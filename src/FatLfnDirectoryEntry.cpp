@@ -64,12 +64,12 @@ std::string FatLfnDirectoryEntry::getName()
     return fileName;
 }
 
-std::weak_ptr<FsDirectory> FatLfnDirectoryEntry::getParent()
+std::shared_ptr<FsDirectory> FatLfnDirectoryEntry::getParent()
 {
     return parent;
 }
 
-std::weak_ptr<FsFile> FatLfnDirectoryEntry::getFile()
+std::shared_ptr<FsFile> FatLfnDirectoryEntry::getFile()
 {
     return parent->getFile(realEntry);
 }

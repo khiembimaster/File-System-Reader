@@ -32,7 +32,7 @@ public:
     bool isDirectory();
 public:
     std::string getName();
-    std::weak_ptr<FsDirectory> getParent();
-    std::weak_ptr<FsFile> getFile();
+    std::shared_ptr<FsDirectory> getParent();
+    std::shared_ptr<FsFile> getFile();
     std::shared_ptr<FatLfnDirectory> getDirectory();
 };
